@@ -41,8 +41,62 @@ def handle_get_members():
 
 
     return jsonify(response_body), status 
+@app.route('/member/<int:member_id>', methods=['GET'])
+def handle_get_specific_members(member_id):
+    # this is how you can use the Family datastructure by calling its methods
+    status = 200
+    try:
+        member = jackson_family.get_member(member_id)
+        if member == False:
+            response_body = {
+                "status": "Could not find member"
+            }
+            status = 404
+        else: 
+             response_body = member
+    except:
+        response_body = {
+      
+            "status": "There was a probelm on the server. Could not fulfill request"
+        }
+        status = 500 
+
+
+    return jsonify(response_body), status 
 
     
+
+@app.route('/member', methods=['POST'])
+def handle_add_specific_members():
+
+    # this is how you can use the Family datastructure by calling its methods
+    status = 200
+    body = request.json
+    if body is None:
+        response_body = {
+            "status": "Body of response is empty."
+        }
+        status = 400
+    else:
+
+        try:
+            member = jackson_family.add_member(body)
+            response_body = member
+        except:
+            response_body = {
+                "status": "There was a problem on the server. Could not fulfill request."
+            }
+            status = 500
+
+    return jsonify(response_body), status
+
+@app.route('/members/<int:member_id>', methods=['DELETE'])
+def delete_member(member_id):
+    status = 200 
+    if jackson_family.delete_member(member_id):
+        return "success", 200
+    else:
+        return "bad request", 404
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
