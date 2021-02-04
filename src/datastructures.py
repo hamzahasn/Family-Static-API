@@ -58,17 +58,13 @@ class FamilyStructure:
         
 
     def delete_member(self, id):
-        # fill this method and update the return
-        status = ""
-        try:
-            for i,x in self._members:
-                if x.id == id:
-                    self._members.pop(i)
-            status = "Successfully deleted number."
-        except: 
-                status = "Something went wrong. Couldn't delete member."
+        status = False
+        for index, item in enumerate(self._members, start=0):
+            if item["id"] == id:
+                self._members.pop(index)
+                status = True
 
-        return status 
+        return status
 
     def get_member(self, id):
         # fill this method and update the return

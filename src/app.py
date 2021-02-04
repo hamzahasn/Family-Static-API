@@ -93,13 +93,13 @@ def handle_add_specific_members():
 @app.route('/member/<int:member_id>', methods=['DELETE'])
 def handle_delete_member(member_id):
     status = 200 
-    if jackson_family.delete_member(member_id): 
-        members = jackson_family.get_all_members()
+    try:
+        members = jackson_family.delete_member(member_id)
         response_body = {
             "done": True, "members": members
         }   
         return jsonify(response_body), 200
-    else:
+    except:
         return "bad request", 404
 
 # this only runs if `$ python src/app.py` is executed
