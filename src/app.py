@@ -90,11 +90,15 @@ def handle_add_specific_members():
 
     return jsonify(response_body), status
 
-@app.route('/members/<int:member_id>', methods=['DELETE'])
-def delete_member(member_id):
+@app.route('/member/<int:member_id>', methods=['DELETE'])
+def handle_delete_member(member_id):
     status = 200 
-    if jackson_family.delete_member(member_id):
-        return "success", 200
+    if jackson_family.delete_member(member_id): 
+        members = jackson_family.get_all_members()
+        response_body = {
+            "done": True, "members": members
+        }   
+        return jsonify(response_body), 200
     else:
         return "bad request", 404
 
